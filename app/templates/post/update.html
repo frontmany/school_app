@@ -1,0 +1,12 @@
+{% extends 'main/base.html'%}
+
+{% block title %}Редактирование темы {% endblock %}
+
+
+{% block content %}
+<form method="post" class="form-control d-flex flex-column gap-2">
+    <input value="{{user.query.get(post.student).name}}" name="subject" type="text" placeholder="Тема" class="form-control">
+    <input value="{{post.subject}}" name="student" type="text" placeholder="ФИО студента" class="form-control">
+    <input value="Обновить" type="submit" class="btn btn-success">
+</form>
+{% endblock %}

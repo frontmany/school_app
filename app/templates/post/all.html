@@ -1,0 +1,134 @@
+{% extends 'main/base.html'%}
+
+{% block title %}Темы{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blocks/table.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/libs/font-awesome.min.css') }}">
+{% endblock %}
+
+
+{% block content %}
+{% if current_user.is_authenticated and current_user.status == "teacher" %}
+<div class="table-responsive custom-table-responsive">
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Преподаватель</th>
+            <th>Студент</th>
+            <th>задание</th>
+            <th>действия</th>
+            
+          </tr>
+        </thead>
+        
+        <tbody>
+            {% for post in posts %}
+            <tr scope="row">
+              {% if post.author.id == current_user.id %}
+              <td>{{post.author.name}}</td>
+
+              
+              <td>
+                {% with student = user.query.get(post.student) %}
+                {{student.name}}
+                {% endwith %}
+              </td>
+                
+
+              <td>{{post.subject}}</td>
+                
+
+              <td>
+                <a href="{{url_for('post.update', id=post.id)}}" class="btn btn-sm btn-secondary"><span class="fa fa-edit"></span></a>
+                <a href=" {{url_for ('post.delete', id=post.id)}}" class="btn btn-sm btn-danger"><span class="fa fa-remove"></span></a>
+              </td>
+                
+
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+
+{% elif current_user.is_authenticated and current_user.status == "user" %}
+<div class="table-responsive custom-table-responsive">
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Преподаватель</th>
+          <th>Студент</th>
+          <th>задание</th>
+          
+        </tr>
+      </thead>
+
+      <tbody>
+          {% for post in posts %}
+          <tr scope="row">
+            {% if user.query.get(post.student).name == current_user.name %}
+            <td>{{post.author.name}}</td>
+
+            
+            <td>
+              {% with student = user.query.get(post.student) %}
+              {{student.name}}
+              {% endwith %}
+            </td>
+              
+
+            <td>{{post.subject}}</td>
+              
+
+
+            {% endif %}
+          </tr>
+          
+          {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="table-responsive custom-table-responsive">
+  <table class="table">
+      <thead>
+        <tr>
+          <th>Преподаватель</th>
+          <th>Студент</th>
+          <th>задание</th>
+          
+        </tr>
+      </thead>
+
+      <tbody>
+          {% for post in posts %}
+          <tr scope="row">
+            
+            <td>{{post.author.name}}</td>
+
+            
+            <td>
+              {% with student = user.query.get(post.student) %}
+              {{student.name}}
+              {% endwith %}
+            </td>
+              
+
+            <td>{{post.subject}}</td>
+              
+
+
+            
+          </tr>
+          
+          {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+
+
+{% endif %}
+{% endblock  %}
